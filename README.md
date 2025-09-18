@@ -113,14 +113,17 @@ npm start
 
 The dashboard expects CSV files with the following columns:
 
-| Column | Type | Range | Description |
-|--------|------|-------|-------------|
-| name | string | - | Student name |
-| math | number | 0-100 | Math score |
-| science | number | 0-100 | Science score |
-| english | number | 0-100 | English score |
-| skill | number | 0-100 | Overall skill level |
-| attention | number | 0-10 | Attention level |
+| Student ID | Name            | Class | Comprehension | Attention | Focus  | Retention | Assessment Score | Engagement Time |
+|------------|-----------------|-------|---------------|-----------|--------|-----------|------------------|------------------|
+| S0001      | Mason Adams     | 2     | 73.86         | 80.15     | 87.15  | 73.09     | 77.43            | 99               |
+| S0002      | Thomas Hood     | 1     | 73.92         | 82.01     | 73.97  | 73.95     | 77.17            | 58               |
+| S0003      | Matthew Diaz    | 5     | 48.25         | 44.65     | 55.26  | 45.49     | 41.49            | 64               |
+| S0004      | Laura Carpenter | 4     | 68.28         | 56.34     | 63.39  | 68.63     | 58.39            | 63               |
+| S0005      | Justin Mccoy    | 4     | 61.66         | 59.18     | 78.81  | 63.89     | 60.48            | 77               |
+| S0006      | Laura Walker    | 3     | 59.46         | 42.11     | 47.17  | 59.37     | 55.72            | 46               |
+| S0007      | Sean Townsend   | 2     | 66.43         | 57.02     | 63.08  | 65.16     | 68.27            | 63               |
+| S0008      | Ruben Allen     | 9     | 54.96         | 49.29     | 46.95  | 57.26     | 57.16            | 57               |
+
 
 ### Sample CSV Format:
 ```csv
