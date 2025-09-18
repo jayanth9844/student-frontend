@@ -6,6 +6,10 @@ A modern, interactive dashboard for visualizing and analyzing student performanc
 
 Check out the live dashboard here: [Student Performance Dashboard](https://student-frontend-v1po.vercel.app/)
 
+## 🔗 Related Repository
+This project uses a separate backend service for ML-based score prediction and analytics:
+- [student-backend](https://github.com/jayanth9844/student-backend)
+
 
 ## 🚀 Features
 
