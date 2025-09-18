@@ -6,6 +6,19 @@ A modern, interactive dashboard for visualizing and analyzing student performanc
 
 Check out the live dashboard here: [Student Performance Dashboard](https://student-frontend-v1po.vercel.app/)
 
+## ⚠️🚀 **Important Notice** 🚀⚠️
+
+<div align="center">
+
+<h2 style="color:#FF5733;">⏳ Please wait for a few seconds after uploading the folder in the dashboard to get the analytics 📊</h2>
+
+<img src="https://img.shields.io/badge/Status-Wait%20Patiently-orange?style=for-the-badge&logo=hourglass-start&logoColor=white" />
+<img src="https://img.shields.io/badge/Analytics-Loading-blue?style=for-the-badge&logo=processingfoundation&logoColor=white" />
+<img src="https://img.shields.io/badge/Tip-Don't%20Refresh-red?style=for-the-badge&logo=exercism&logoColor=white" />
+
+</div>
+
+
 ## 🔗 Related Repository
 This project uses a separate backend service for ML-based score prediction and analytics:
 - [student-backend](https://github.com/jayanth9844/student-backend)
