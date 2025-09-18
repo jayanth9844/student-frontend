@@ -53,10 +53,11 @@ export default function StudentTable({ students }: StudentTableProps) {
     })
   }, [students])
 
-  // Filter students based on search term
+  // Filter students based on search term (search by name or student_id)
   const filteredStudents = useMemo(() => {
     return studentsWithAverage.filter(student =>
-      student.name.toLowerCase().includes(searchTerm.toLowerCase())
+      student.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      (student.student_id && student.student_id.toLowerCase().includes(searchTerm.toLowerCase()))
     )
   }, [studentsWithAverage, searchTerm])
 
@@ -136,7 +137,7 @@ export default function StudentTable({ students }: StudentTableProps) {
           </div>
           <input
             type="text"
-            placeholder="Search students..."
+            placeholder="Search by name or student ID..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             className="pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
@@ -148,6 +149,15 @@ export default function StudentTable({ students }: StudentTableProps) {
         <table className="min-w-full divide-y divide-gray-200">
           <thead className="bg-gray-50">
             <tr>
+              <th 
+                className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:bg-gray-100"
+                onClick={() => handleSort('student_id')}
+              >
+                <div className="flex items-center space-x-1">
+                  <span>Student ID</span>
+                  {getSortIcon('student_id')}
+                </div>
+              </th>
               <th 
                 className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:bg-gray-100"
                 onClick={() => handleSort('name')}
@@ -234,6 +244,9 @@ export default function StudentTable({ students }: StudentTableProps) {
           <tbody className="bg-white divide-y divide-gray-200">
             {sortedStudents.map((student, index) => (
               <tr key={student.name} className={index % 2 === 0 ? 'bg-white' : 'bg-gray-50'}>
+                <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-blue-600">
+                  {student.student_id || 'N/A'}
+                </td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
                   {student.name}
                 </td>

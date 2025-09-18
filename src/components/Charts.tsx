@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState } from 'react'
+import React, { useState, useMemo, useEffect, useRef } from 'react'
 import {
   BarChart,
   Bar,
@@ -28,10 +28,46 @@ export default function Charts({ students }: ChartsProps) {
   const [selectedStudent, setSelectedStudent] = useState<Student | null>(
     students.length > 0 ? students[0] : null
   )
+  const [studentSearch, setStudentSearch] = useState('')
+  const [showDropdown, setShowDropdown] = useState(false)
+  const dropdownRef = useRef<HTMLDivElement>(null)
+
+  // Handle click outside to close dropdown
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setShowDropdown(false)
+      }
+    }
+
+    document.addEventListener('mousedown', handleClickOutside)
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside)
+    }
+  }, [])
+
+  // Initialize search with first student
+  useEffect(() => {
+    if (students.length > 0 && !selectedStudent) {
+      const firstStudent = students[0]
+      setSelectedStudent(firstStudent)
+      setStudentSearch(`${firstStudent.name} (${firstStudent.student_id || 'No ID'})`)
+    }
+  }, [students, selectedStudent])
+
+  // Filter students for search dropdown
+  const filteredStudents = useMemo(() => {
+    if (!studentSearch) return students
+    return students.filter(student =>
+      student.name.toLowerCase().includes(studentSearch.toLowerCase()) ||
+      (student.student_id && student.student_id.toLowerCase().includes(studentSearch.toLowerCase()))
+    )
+  }, [students, studentSearch])
 
   // Prepare data for comprehension vs score bar chart (updated for new format)
   const skillScoreData = students.map(student => ({
     name: student.name,
+    student_id: student.student_id,
     comprehension: student.comprehension || 0,
     assessmentScore: student.assessment_score || 0
   })).sort((a, b) => b.comprehension - a.comprehension).slice(0, 10) // Show top 10
@@ -40,7 +76,8 @@ export default function Charts({ students }: ChartsProps) {
   const attentionPerformanceData = students.map(student => ({
     attention: student.attention || 0,
     performance: student.assessment_score || 0,
-    name: student.name
+    name: student.name,
+    student_id: student.student_id
   }))
 
   // Prepare data for individual student radar chart (new format)
@@ -74,9 +111,11 @@ export default function Charts({ students }: ChartsProps) {
 
   const CustomTooltip = ({ active, payload, label }: any) => {
     if (active && payload && payload.length) {
+      const data = payload[0].payload
       return (
         <div className="bg-white p-3 border border-gray-300 rounded-lg shadow-lg">
-          <p className="font-medium">{`${label}`}</p>
+          <p className="font-medium">{data.name}</p>
+          <p className="text-sm text-gray-600">ID: {data.student_id || 'N/A'}</p>
           {payload.map((entry: any, index: number) => (
             <p key={index} style={{ color: entry.color }}>
               {`${entry.dataKey}: ${entry.value.toFixed(1)}`}
@@ -94,6 +133,7 @@ export default function Charts({ students }: ChartsProps) {
       return (
         <div className="bg-white p-3 border border-gray-300 rounded-lg shadow-lg">
           <p className="font-medium">{data.name}</p>
+          <p className="text-sm text-gray-600">ID: {data.student_id || 'N/A'}</p>
           <p style={{ color: payload[0].color }}>
             Attention: {data.attention.toFixed(1)}
           </p>
@@ -175,24 +215,57 @@ export default function Charts({ students }: ChartsProps) {
       <div className="bg-white rounded-lg shadow-md p-6">
         <div className="flex items-center justify-between mb-4">
           <h3 className="text-lg font-semibold text-gray-900">Individual Student Profile</h3>
-          <select
-            value={selectedStudent?.name || ''}
-            onChange={(e) => {
-              const student = students.find(s => s.name === e.target.value)
-              setSelectedStudent(student || null)
-            }}
-            className="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-          >
-            {students.map((student) => (
-              <option key={student.name} value={student.name}>
-                {student.name}
-              </option>
-            ))}
-          </select>
+          <div className="relative" ref={dropdownRef}>
+            <input
+              type="text"
+              placeholder="Search by name or student ID..."
+              value={studentSearch}
+              onChange={(e) => {
+                setStudentSearch(e.target.value)
+                setShowDropdown(true)
+              }}
+              onFocus={() => setShowDropdown(true)}
+              className="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 w-64"
+            />
+            {showDropdown && filteredStudents.length > 0 && (
+              <div className="absolute z-10 w-full mt-1 bg-white border border-gray-300 rounded-md shadow-lg max-h-60 overflow-y-auto">
+                {filteredStudents.slice(0, 10).map((student) => (
+                  <div
+                    key={student.student_id || student.name}
+                    className="px-3 py-2 hover:bg-gray-100 cursor-pointer"
+                    onClick={() => {
+                      setSelectedStudent(student)
+                      setStudentSearch(`${student.name} (${student.student_id || 'No ID'})`)
+                      setShowDropdown(false)
+                    }}
+                  >
+                    <div className="font-medium">{student.name}</div>
+                    <div className="text-sm text-gray-600">ID: {student.student_id || 'N/A'}</div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
         </div>
         
         {selectedStudent && (
-          <div className="h-80">
+          <>
+            <div className="mb-4 p-4 bg-gray-50 rounded-lg">
+              <div className="flex items-center justify-between">
+                <div>
+                  <h4 className="font-semibold text-gray-900">{selectedStudent.name}</h4>
+                  <p className="text-sm text-gray-600">Student ID: {selectedStudent.student_id || 'N/A'}</p>
+                  <p className="text-sm text-gray-600">Class: {selectedStudent.class || 'N/A'}</p>
+                </div>
+                <div className="text-right">
+                  <p className="text-sm text-gray-600">Assessment Score</p>
+                  <p className="text-lg font-semibold text-blue-600">
+                    {selectedStudent.assessment_score?.toFixed(1) || 'N/A'}
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div className="h-80">
             <ResponsiveContainer width="100%" height="100%">
               <RadarChart data={radarData} margin={{ top: 20, right: 80, bottom: 20, left: 80 }}>
                 <PolarGrid />
@@ -219,7 +292,8 @@ export default function Charts({ students }: ChartsProps) {
                 <Legend />
               </RadarChart>
             </ResponsiveContainer>
-          </div>
+            </div>
+          </>
         )}
       </div>
     </div>
