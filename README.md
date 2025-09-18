@@ -2,7 +2,7 @@
 
 A modern, interactive dashboard for visualizing and analyzing student performance data built with Next.js 14, TypeScript, and Tailwind CSS.
 
-![Dashboard Preview](https://via.placeholder.com/800x400/3B82F6/FFFFFF?text=Student+Performance+Dashboard)
+![Dashboard Preview](https://student-frontend-v1po.vercel.app/)
 
 ## 🚀 Features
 
