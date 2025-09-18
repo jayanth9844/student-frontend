@@ -27,7 +27,8 @@
     "typescript": "^5.5.4"
   },
   "devDependencies": {
-    "@next/swc-win32-x64-msvc": "^15.5.3",
+    "@typescript-eslint/eslint-plugin": "^6.21.0",
+    "@typescript-eslint/parser": "^6.21.0",
     "eslint": "^8.57.0",
     "eslint-config-next": "14.2.5"
   }

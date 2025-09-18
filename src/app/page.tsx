@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import CSVUpload from '@/components/CSVUpload'
 import OverviewStats from '@/components/OverviewStats'
 import Charts from '@/components/Charts'
@@ -37,12 +37,7 @@ export default function Dashboard() {
     },
   })
 
-  // Load sample data on component mount
-  useEffect(() => {
-    loadSampleData()
-  }, [])
-
-  const loadSampleData = async () => {
+  const loadSampleData = useCallback(async () => {
     try {
       // Small embedded sample dataset for immediate display
       const sampleStudents: Student[] = [
@@ -140,7 +135,12 @@ export default function Dashboard() {
     } catch (error) {
       console.error('Failed to load sample data:', error)
     }
-  }
+  }, [])
+
+  // Load sample data on component mount
+  useEffect(() => {
+    loadSampleData()
+  }, [loadSampleData])
 
   const handleDataUpload = async (uploadedStudents: Student[]) => {
     try {
