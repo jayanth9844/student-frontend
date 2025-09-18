@@ -31,7 +31,7 @@ This project uses a separate backend service for ML-based score prediction and a
 - **📊 Persona Analytics**: Dedicated charts showing persona distribution and predicted scores
 - **🔍 Enhanced Student Table**: Sort and filter with predicted assessment scores and learning personas
 - **💡 AI-Powered Insights**: Automated trend analysis, outlier detection, and recommendations
-- **📱 Responsive Design**: Works seamlessly on desktop, tablet, and mobile devices
+- **📱 Responsive Design**: Works seamlessly on desktop, tablet, and mobile devices(note responsive properly)
 
 ## 🛠️ Tech Stack
 
